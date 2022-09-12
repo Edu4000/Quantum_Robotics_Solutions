@@ -71,7 +71,7 @@ def move_to_next_point(origin_vect:np.array, target_vect:np.array, step:int = 1)
     print("Reached Goal Position: ", rover.pos())
     rover.dot(5)
 
-
+# Adding the nearest point to the path list
 def path_finder(target_list:List[np.array], origin_vect:np.array, current_path:List[np.array]) -> _void:
 
     if (len(target_list) == 1):
@@ -94,26 +94,13 @@ def distance_from_a_to_b (vect_start:np.array, vect_end:np.array) -> float:
     distance_vect = vect_start - vect_end
     return module(distance_vect)
 
-def path_length (current_path:List[np.array]) -> float:
-
-    distance = 0
-
-    for i in range(len(current_path) - 2):
-        distance_vect = current_path[i] - current_path[i+1]
-        distance += module(distance_vect)
-
-    return distance
-
-
 def get_optimized_path(target_list:List[np.array], origin_vect:np.array) -> List[np.array]:
 
-    posible_paths = []
     current_path = [origin_vect]
     path_finder(target_list, origin_vect, current_path)
     return current_path
 
-
-if __name__ == "__main__":
+def solution_geometric():
     print("<----- Path Planning ----->")
 
     origin_vect = np.array([0, 0])
@@ -139,5 +126,9 @@ if __name__ == "__main__":
     for i in range(len(best_path) - 2):
         move_to_next_point(best_path[i], best_path[i + 1])
 
-    while True:
+    for i in range (100):
         rover.left(0.1)
+
+
+if __name__ == "__main__":
+    solution_geometric()
