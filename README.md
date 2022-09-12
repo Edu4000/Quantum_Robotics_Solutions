@@ -41,3 +41,6 @@ Para lograr esta aproximacion geometrica, solo se busco por el vertice mas cerca
 Tambien existen algoritmos como el Algoritmo de Dijkstra para encontrar la ruta mas optima, pero este falla al no tener una meta definida. <Br> <Br>
 
 # Running Examples
+![Test 1](/img/Test1.png "Test 1") <br>
+![Test 2](/img/Test2.png "Test 2") <br>
+![Test 3](/img/Test3.png "Test 3") <br>
