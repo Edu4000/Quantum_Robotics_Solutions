@@ -55,7 +55,11 @@ def move_to_next_point(origin_vect:np.array, target_vect:np.array, step:int = 1)
         turning_angle = math.atan(direction_vect[1] / direction_vect[0]) - turning_angle + math.pi
 
     # Rotating to correct direction
-    rover.left(turning_angle)
+    if (turning_angle > 0):
+        rover.left(turning_angle)
+    else:
+        rover.right(abs(turning_angle))
+        
     
     # Moving towards the target
     for d in range(0, int(module(direction_vect)), step):
@@ -68,21 +72,27 @@ def move_to_next_point(origin_vect:np.array, target_vect:np.array, step:int = 1)
     rover.dot(5)
 
 
-def path_finder(target_list:List[np.array], origin_vect:np.array, current_path:List[np.array], posible_paths:List[List[np.array]]) -> _void:
+def path_finder(target_list:List[np.array], origin_vect:np.array, current_path:List[np.array]) -> _void:
 
     if (len(target_list) == 1):
-        current_path.append(target_list[0])
-        posible_paths.append(current_path.copy())
-        current_path.pop()
+        current_path.append(target_list.pop(0))
+        return
+
+    smallest_distance = math.inf
+    bestindex = 0
 
     for i in range(len(target_list)):
+        if smallest_distance > distance_from_a_to_b(origin_vect, target_list[i]):
+            smallest_distance = distance_from_a_to_b(origin_vect, target_list[i])
+            bestindex = i
 
-        current_path.append(target_list.pop(i))
+    current_path.append(target_list.pop(bestindex))
+    path_finder(target_list, current_path[len(current_path)-1], current_path)
 
-        path_finder(target_list, origin_vect, current_path, posible_paths)
 
-        target_list.insert(i, current_path.pop())
-
+def distance_from_a_to_b (vect_start:np.array, vect_end:np.array) -> float:
+    distance_vect = vect_start - vect_end
+    return module(distance_vect)
 
 def path_length (current_path:List[np.array]) -> float:
 
@@ -99,17 +109,8 @@ def get_optimized_path(target_list:List[np.array], origin_vect:np.array) -> List
 
     posible_paths = []
     current_path = [origin_vect]
-    path_finder(target_list, origin_vect, current_path, posible_paths)
-
-    optimized_distance = math.inf
-    optimized_path = []
-
-    for path in posible_paths:
-        if (path_length(path) < optimized_distance):
-            optimized_distance = path_length(path)
-            optimized_path = path
-
-    return optimized_path
+    path_finder(target_list, origin_vect, current_path)
+    return current_path
 
 
 if __name__ == "__main__":
